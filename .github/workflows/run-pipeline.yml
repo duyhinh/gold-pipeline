@@ -1,0 +1,28 @@
+name: XAUUSD Pipeline
+
+on:
+  schedule:
+    - cron: '30 0,7,13 * * *'
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          pip install openai requests
+          pip install --upgrade --no-cache-dir git+https://github.com/rongardF/tvdatafeed.git
+      - name: Run pipeline
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          TRADINGVIEW_USERNAME: ${{ secrets.TRADINGVIEW_USERNAME }}
+          TRADINGVIEW_PASSWORD: ${{ secrets.TRADINGVIEW_PASSWORD }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python xauusd_pipeline.py
