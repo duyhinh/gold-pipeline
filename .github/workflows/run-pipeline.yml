@@ -1,9 +1,6 @@
 name: XAUUSD Pipeline
 
-on:
-  schedule:
-    - cron: '30 0,7,13 * * *'
-
+on: workflow_dispatch:
 jobs:
   run-pipeline:
     runs-on: ubuntu-latest
